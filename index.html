@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iOS Web Clip Profile Generator</title>
+    
+    <!-- Link to Google Font (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS Variables --- */
+        :root {
+            --font-family: 'Inter', sans-serif;
+            --background-color: #f7f8fa; /* Lighter background */
+            --container-background: #ffffff;
+            --primary-color: #007aff; /* Apple's blue */
+            --primary-color-hover: #0056b3;
+            --text-color: #1d1d1f; /* Darker text */
+            --text-color-secondary: #6e6e73;
+            --border-color: #d2d2d7;
+            --input-background: #f0f0f5; /* Slightly contrasting input bg */
+            --border-radius: 12px; /* Softer radius */
+            --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Softer shadow */
+            --box-shadow-focus: 0 0 0 3px rgba(0, 122, 255, 0.2); /* Focus ring */
+            --transition-speed: 0.2s;
+        }
+
+        /* --- Base Styles --- */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+             font-size: 16px; /* Base font size */
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: 1.6;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: grid; /* Use grid for centering */
+            place-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- Container --- */
+        .container {
+            background-color: var(--container-background);
+            padding: 35px 40px; /* More padding */
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            max-width: 550px;
+            width: 100%;
+            overflow: hidden; /* In case elements overflow radius */
+        }
+
+        /* --- Typography --- */
+        h1 {
+            font-size: 1.75rem; /* Responsive font size */
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        p {
+            margin-bottom: 25px;
+            color: var(--text-color-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* --- Form Elements --- */
+        #profileForm {
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Spacing between form elements */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px; /* Reduced margin */
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        input[type="text"],
+        input[type="url"],
+        input[type="file"] {
+            width: 100%;
+            padding: 12px 15px; /* More padding */
+            border: 1px solid var(--border-color);
+            border-radius: 8px; /* Slightly less round than container */
+            background-color: #fff; /* White background for inputs */
+            font-family: var(--font-family);
+            font-size: 1rem;
+            color: var(--text-color);
+            transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            appearance: none; /* Remove default styles */
+            -webkit-appearance: none;
+        }
+
+        input[type="text"]:focus,
+        input[type="url"]:focus,
+        input[type="file"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: var(--box-shadow-focus);
+        }
+
+        /* --- File Input Specific Styling --- */
+         input[type="file"] {
+            padding: 8px 15px; /* Adjust padding for file input */
+            background-color: var(--input-background);
+            cursor: pointer;
+         }
+        /* Style the button part of the file input */
+         input[type="file"]::file-selector-button {
+            font-family: var(--font-family);
+            font-weight: 500;
+            color: var(--primary-color);
+            background-color: transparent;
+            border: none;
+            padding: 4px 8px;
+            margin-right: 10px;
+            cursor: pointer;
+            transition: color var(--transition-speed) ease;
+         }
+         input[type="file"]::file-selector-button:hover {
+             color: var(--primary-color-hover);
+         }
+
+
+        /* --- Button Styling --- */
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            font-family: var(--font-family);
+            transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+            margin-top: 10px; /* Space above button */
+        }
+
+        button:hover:not(:disabled) {
+            background-color: var(--primary-color-hover);
+            transform: translateY(-2px); /* Subtle lift */
+        }
+
+        button:active:not(:disabled) {
+             transform: translateY(0px); /* Press down */
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            color: #888888;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* --- Status Message --- */
+        #status {
+            margin-top: 25px;
+            font-style: normal; /* Remove italic */
+            font-size: 0.9rem;
+            color: var(--text-color-secondary);
+            min-height: 1.5em; /* Prevent layout shift */
+            text-align: center;
+        }
+
+        /* --- Instructions Section --- */
+        .instructions {
+            margin-top: 35px;
+            padding: 20px;
+            background-color: #f0f4ff; /* Lighter blue background */
+            border-radius: var(--border-radius);
+            border: 1px solid #d6e4ff; /* Soft border */
+            font-size: 0.88rem;
+            color: #334d80; /* Darker blue text */
+        }
+
+        .instructions h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1a3a6e;
+        }
+
+        .instructions ol {
+            padding-left: 20px; /* Indent list */
+            list-style-type: decimal; /* Standard numbers */
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        /* --- Optional: Responsive Adjustments --- */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 25px 20px;
+            }
+            h1 {
+                 font-size: 1.5rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- The rest of your HTML body remains the same -->
+    <div class="container">
+        <h1>iOS Web Clip Profile Generator</h1>
+        <p>Create a configuration profile (.mobileconfig) to add a website shortcut to your iOS home screen.</p>
+
+        <form id="profileForm">
+            <label for="labelName">Shortcut Name (Label):</label>
+            <input type="text" id="labelName" name="labelName" placeholder="e.g., My Favorite Site" required>
+
+            <label for="websiteUrl">Website URL:</label>
+            <input type="url" id="websiteUrl" name="websiteUrl" placeholder="https://example.com" required>
+
+            <label for="iconFile">Icon Image (PNG recommended, square):</label>
+            <input type="file" id="iconFile" name="iconFile" accept="image/png, image/jpeg" required>
+
+            <label for="profileName">Profile Display Name (Optional):</label>
+            <input type="text" id="profileName" name="profileName" placeholder="e.g., Website Shortcuts">
+
+            <label for="profileOrg">Organization Name (Optional):</label>
+            <input type="text" id="profileOrg" name="profileOrg" placeholder="e.g., My Company">
+
+            <button type="submit" id="generateButton">Generate Profile</button>
+        </form>
+
+        <div id="status"></div>
+
+        <div class="instructions">
+            <h2>How to Use</h2>
+            <ol>
+                <li>Fill in the details above.</li>
+                <li>Choose an icon image (PNG format, ideally square like 180x180px).</li>
+                <li>Click "Generate Profile".</li>
+                <li>A `.mobileconfig` file will be downloaded.</li>
+                <li>Transfer this file to your iOS device (e.g., via Email, AirDrop, iCloud Drive).</li>
+                <li>Open the file on your iOS device.</li>
+                <li>Go to Settings > General > VPN & Device Management (or Profiles & Device Management).</li>
+                <li>Tap on the downloaded profile and follow the prompts to install it. You will see warnings – proceed if you trust this generated file.</li>
+                <li>The website shortcut will appear on your home screen.</li>
+            </ol>
+        </div>
+    </div>
+
+    <script src="script.js"></script> <!-- Your existing JS file -->
+</body>
+</html>
