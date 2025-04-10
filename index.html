@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iOS Web Clip Profile Generator</title>
-
-    <!-- Link to Google Font (Inter) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
     <style>
         /* --- CSS Variables --- */
         :root {
@@ -29,16 +26,8 @@
         }
 
         /* --- Base Styles --- */
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-             font-size: 16px;
-        }
-
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 16px; }
         body {
             font-family: var(--font-family);
             line-height: 1.6;
@@ -62,213 +51,56 @@
         }
 
         /* --- Typography --- */
-        h1 {
-            font-size: 1.75rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--text-color);
-        }
-
-        p {
-            margin-bottom: 25px;
-            color: var(--text-color-secondary);
-            font-size: 0.95rem;
-        }
+        h1 { font-size: 1.75rem; font-weight: 600; margin-bottom: 10px; color: var(--text-color); }
+        p { margin-bottom: 25px; color: var(--text-color-secondary); font-size: 0.95rem; }
 
         /* --- Form Elements --- */
-        #profileForm {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        #profileForm { display: flex; flex-direction: column; gap: 20px; }
+        label { font-weight: 500; font-size: 0.9rem; color: var(--text-color); }
+        label[for="labelName"], label[for="websiteUrl"], label[for="iconFile"],
+        label[for="profileName"], label[for="profileOrg"], label[for="consentText"] /* Added consentText */ {
+            display: block; margin-bottom: 5px;
         }
-
-        /* General label styling */
-        label {
-             font-weight: 500;
-             font-size: 0.9rem;
-             color: var(--text-color);
-        }
-
-        /* Label specifically for text/url/file inputs */
-        label[for="labelName"],
-        label[for="websiteUrl"],
-        label[for="iconFile"],
-        label[for="profileName"],
-        label[for="profileOrg"] {
-             display: block;
-             margin-bottom: 5px;
-        }
-
-
-        input[type="text"],
-        input[type="url"],
-        input[type="file"] {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background-color: #fff;
-            font-family: var(--font-family);
-            font-size: 1rem;
-            color: var(--text-color);
+        input[type="text"], input[type="url"], input[type="file"] {
+            width: 100%; padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 8px;
+            background-color: #fff; font-family: var(--font-family); font-size: 1rem; color: var(--text-color);
             transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-            appearance: none;
-            -webkit-appearance: none;
+            appearance: none; -webkit-appearance: none;
         }
-
-        input[type="text"]:focus,
-        input[type="url"]:focus,
-        input[type="file"]:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: var(--box-shadow-focus);
+        input[type="text"]:focus, input[type="url"]:focus, input[type="file"]:focus {
+            outline: none; border-color: var(--primary-color); box-shadow: var(--box-shadow-focus);
         }
-
-        input[type="file"] {
-            padding: 8px 15px;
-            background-color: var(--input-background);
-            cursor: pointer;
+        input[type="file"] { padding: 8px 15px; background-color: var(--input-background); cursor: pointer; }
+        input[type="file"]::file-selector-button {
+            font-family: var(--font-family); font-weight: 500; color: var(--primary-color); background-color: transparent;
+            border: none; padding: 4px 8px; margin-right: 10px; cursor: pointer; transition: color var(--transition-speed) ease;
         }
-         input[type="file"]::file-selector-button {
-            font-family: var(--font-family);
-            font-weight: 500;
-            color: var(--primary-color);
-            background-color: transparent;
-            border: none;
-            padding: 4px 8px;
-            margin-right: 10px;
-            cursor: pointer;
-            transition: color var(--transition-speed) ease;
-         }
-         input[type="file"]::file-selector-button:hover {
-             color: var(--primary-color-hover);
-         }
+        input[type="file"]::file-selector-button:hover { color: var(--primary-color-hover); }
 
         /* --- Checkbox Styling --- */
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            gap: 10px; /* Space between checkbox and label */
-            background-color: var(--input-background); /* Optional: subtle background */
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer; /* Make the whole area clickable */
-            border: 1px solid transparent; /* Placeholder for focus */
-            transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-        }
-        .checkbox-container:focus-within { /* Style container when checkbox inside is focused */
-             outline: none;
-             border-color: var(--primary-color);
-             box-shadow: var(--box-shadow-focus);
-        }
-
-
-        input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--primary-color); /* Modern way to color checkbox */
-            cursor: pointer;
-            margin: 0; /* Remove default margin */
-        }
-
-        /* Label specifically for the checkbox */
-        .checkbox-container label {
-            font-weight: 500;
-            font-size: 0.95rem; /* Match input text size */
-            color: var(--text-color);
-            cursor: pointer;
-            flex-grow: 1; /* Allow label to take up space */
-            margin-bottom: 0; /* Override general label margin */
-        }
-        .checkbox-container label small {
-             display: block;
-             font-weight: 400;
-             font-size: 0.8rem;
-             color: var(--text-color-secondary);
-        }
-
+        .checkbox-container { display: flex; align-items: center; gap: 10px; background-color: var(--input-background); padding: 10px 15px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; }
+        .checkbox-container:focus-within { outline: none; border-color: var(--primary-color); box-shadow: var(--box-shadow-focus); }
+        input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary-color); cursor: pointer; margin: 0; }
+        .checkbox-container label { font-weight: 500; font-size: 0.95rem; color: var(--text-color); cursor: pointer; flex-grow: 1; margin-bottom: 0; }
+        .checkbox-container label small { display: block; font-weight: 400; font-size: 0.8rem; color: var(--text-color-secondary); }
 
         /* --- Button Styling --- */
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            font-family: var(--font-family);
-            transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
-            margin-top: 10px;
-        }
-
-        button:hover:not(:disabled) {
-            background-color: var(--primary-color-hover);
-            transform: translateY(-2px);
-        }
-
-        button:active:not(:disabled) {
-             transform: translateY(0px);
-        }
-
-        button:disabled {
-            background-color: #cccccc;
-            color: #888888;
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
+        button { background-color: var(--primary-color); color: white; padding: 14px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 500; font-family: var(--font-family); transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease; margin-top: 10px; }
+        button:hover:not(:disabled) { background-color: var(--primary-color-hover); transform: translateY(-2px); }
+        button:active:not(:disabled) { transform: translateY(0px); }
+        button:disabled { background-color: #cccccc; color: #888888; cursor: not-allowed; opacity: 0.7; }
 
         /* --- Status Message --- */
-        #status {
-            margin-top: 25px;
-            font-style: normal;
-            font-size: 0.9rem;
-            color: var(--text-color-secondary);
-            min-height: 1.5em;
-            text-align: center;
-        }
+        #status { margin-top: 25px; font-style: normal; font-size: 0.9rem; color: var(--text-color-secondary); min-height: 1.5em; text-align: center; }
 
         /* --- Instructions Section --- */
-        .instructions {
-            margin-top: 35px;
-            padding: 20px;
-            background-color: #f0f4ff;
-            border-radius: var(--border-radius);
-            border: 1px solid #d6e4ff;
-            font-size: 0.88rem;
-            color: #334d80;
-        }
-
-        .instructions h2 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #1a3a6e;
-        }
-
-        .instructions ol {
-            padding-left: 20px;
-            list-style-type: decimal;
-        }
-
-        .instructions li {
-            margin-bottom: 8px;
-            line-height: 1.5;
-        }
+        .instructions { margin-top: 35px; padding: 20px; background-color: #f0f4ff; border-radius: var(--border-radius); border: 1px solid #d6e4ff; font-size: 0.88rem; color: #334d80; }
+        .instructions h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: #1a3a6e; }
+        .instructions ol { padding-left: 20px; list-style-type: decimal; }
+        .instructions li { margin-bottom: 8px; line-height: 1.5; }
 
         /* --- Responsive Adjustments --- */
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-            .container {
-                padding: 25px 20px;
-            }
-            h1 {
-                 font-size: 1.5rem;
-            }
-        }
+        @media (max-width: 600px) { body { padding: 10px; } .container { padding: 25px 20px; } h1 { font-size: 1.5rem; } }
     </style>
 </head>
 <body>
@@ -286,22 +118,24 @@
             <label for="iconFile">Icon Image (PNG recommended, square):</label>
             <input type="file" id="iconFile" name="iconFile" accept="image/png, image/jpeg" required>
 
-            <!-- ## START: Added Full Screen Toggle ## -->
-            <div class="checkbox-container" tabindex="0"> <!-- Make container focusable -->
+            <div class="checkbox-container" tabindex="0">
                  <input type="checkbox" id="fullscreenToggle" name="fullscreenToggle">
                  <label for="fullscreenToggle">
                      Open in Full Screen Mode?
                      <small>Hides browser address bar and buttons.</small>
                  </label>
              </div>
-            <!-- ## END: Added Full Screen Toggle ## -->
-
 
             <label for="profileName">Profile Display Name (Optional):</label>
             <input type="text" id="profileName" name="profileName" placeholder="e.g., Website Shortcuts">
 
             <label for="profileOrg">Organization Name (Optional):</label>
             <input type="text" id="profileOrg" name="profileOrg" placeholder="e.g., My Company">
+
+            <!-- ## START: Added Consent Text Field ## -->
+            <label for="consentText">Consent Text (Optional):</label>
+            <input type="text" id="consentText" name="consentText" placeholder="Text shown during installation">
+            <!-- ## END: Added Consent Text Field ## -->
 
             <button type="submit" id="generateButton">Generate Profile</button>
         </form>
@@ -311,20 +145,20 @@
         <div class="instructions">
             <h2>How to Use</h2>
             <ol>
-                <li>Fill in the details above.</li>
+                <li>Fill in the details above (Consent Text is optional).</li> <!-- Updated -->
                 <li>Choose an icon image (PNG format, ideally square like 180x180px).</li>
-                <li>Decide if you want Full Screen mode.</li> <!-- Updated instruction -->
+                <li>Decide if you want Full Screen mode.</li>
                 <li>Click "Generate Profile".</li>
                 <li>A `.mobileconfig` file will be downloaded.</li>
                 <li>Transfer this file to your iOS device (e.g., via Email, AirDrop, iCloud Drive).</li>
                 <li>Open the file on your iOS device.</li>
                 <li>Go to Settings > General > VPN & Device Management (or Profiles & Device Management).</li>
-                <li>Tap on the downloaded profile and follow the prompts to install it. You will see warnings – proceed if you trust this generated file.</li>
+                <li>Tap on the downloaded profile and follow the prompts to install it. You will see the Consent Text (if provided) and warnings – proceed if you trust this generated file.</li> <!-- Updated -->
                 <li>The website shortcut will appear on your home screen.</li>
             </ol>
         </div>
     </div>
 
-    <script src="script.js"></script> <!-- Your existing JS file -->
+    <script src="script.js"></script>
 </body>
 </html>

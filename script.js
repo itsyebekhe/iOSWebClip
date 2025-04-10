@@ -1,12 +1,13 @@
 document.getElementById('profileForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent default form submission
+    event.preventDefault();
 
     const labelName = document.getElementById('labelName').value.trim();
     const websiteUrl = document.getElementById('websiteUrl').value.trim();
     const iconFile = document.getElementById('iconFile').files[0];
-    const isFullScreen = document.getElementById('fullscreenToggle').checked; // Get checkbox state (true/false)
+    const isFullScreen = document.getElementById('fullscreenToggle').checked;
     const profileName = document.getElementById('profileName').value.trim() || `Web Clip: ${labelName}`;
     const profileOrg = document.getElementById('profileOrg').value.trim() || 'Self-Generated';
+    const consentText = document.getElementById('consentText').value.trim();
     const statusDiv = document.getElementById('status');
     const generateButton = document.getElementById('generateButton');
 
@@ -19,7 +20,6 @@ document.getElementById('profileForm').addEventListener('submit', function(event
         return;
     }
 
-    // Basic URL validation
     try {
         new URL(websiteUrl);
     } catch (_) {
@@ -31,20 +31,20 @@ document.getElementById('profileForm').addEventListener('submit', function(event
     const reader = new FileReader();
 
     reader.onload = function(e) {
-        const base64IconData = e.target.result.split(',')[1]; // Get Base64 part
+        const base64IconData = e.target.result.split(',')[1];
         const profileContent = generateMobileConfig(
             labelName,
             websiteUrl,
             base64IconData,
             profileName,
             profileOrg,
-            isFullScreen // <-- Pass the boolean value here
+            isFullScreen,
+            consentText
         );
 
         downloadMobileConfig(profileContent, labelName);
         statusDiv.textContent = `Profile '${labelName}.mobileconfig' generated successfully. Check your downloads.`;
         generateButton.disabled = false;
-        // Optionally reset form: document.getElementById('profileForm').reset();
     };
 
     reader.onerror = function(e) {
@@ -53,49 +53,54 @@ document.getElementById('profileForm').addEventListener('submit', function(event
         generateButton.disabled = false;
     };
 
-    reader.readAsDataURL(iconFile); // Read file as Base64 Data URL
+    reader.readAsDataURL(iconFile);
 });
 
 function generateUUID() {
-    // Basic pseudo-UUID generator (sufficient for this purpose)
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16).toUpperCase();
     });
 }
 
-// Updated function signature to accept isFullScreen
-function generateMobileConfig(label, url, iconBase64, profileDisplayName, profileOrg, isFullScreen) {
+// XML Escape basic characters in user input
+const escapeXml = (unsafe) => {
+    if (!unsafe) return '';
+    return unsafe.replace(/[<>&'"]/g, function (c) {
+        switch (c) {
+            case '<': return '<';
+            case '>': return '>';
+            case '&': return '&';
+            case '\'': return '\'';
+            case '"': return '"';
+        }
+    });
+};
+
+function generateMobileConfig(label, url, iconBase64, profileDisplayName, profileOrg, isFullScreen, consentText) {
     const profileUUID = generateUUID();
     const payloadUUID = generateUUID();
-    const profileIdentifier = `com.example.webclip.${profileUUID}`; // Make it somewhat unique
-
-    // XML Escape basic characters in user input
-    const escapeXml = (unsafe) => {
-        if (!unsafe) return '';
-        return unsafe.replace(/[<>&'"]/g, function (c) {
-            switch (c) {
-                case '<': return '<';
-                case '>': return '>';
-                case '&': return '&';
-                case '\'': return '\'';
-                case '"': return '"';
-            }
-        });
-    };
+    const profileIdentifier = `com.example.webclip.${profileUUID}`;
 
     const escapedLabel = escapeXml(label);
     const escapedUrl = escapeXml(url);
     const escapedProfileDisplayName = escapeXml(profileDisplayName);
     const escapedProfileOrg = escapeXml(profileOrg);
+    const escapedConsentText = escapeXml(consentText); // Escape consent text
 
+    // Conditionally create the ConsentText dictionary string
+    const consentDictString = escapedConsentText ? `
+    <key>ConsentText</key>
+    <dict>
+        <key>default</key>
+        <string>${escapedConsentText}</string>
+    </dict>` : '';
 
     // .mobileconfig XML structure
-    // Use the isFullScreen variable to output <true/> or <false/> tag
     const xmlString = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
+<dict>${consentDictString} <!-- Inject ConsentText dict here -->
     <key>PayloadContent</key>
     <array>
         <dict>
@@ -153,7 +158,7 @@ function generateMobileConfig(label, url, iconBase64, profileDisplayName, profil
 
 function downloadMobileConfig(content, label) {
     const filename = `${label.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'webclip'}.mobileconfig`;
-    const mimeType = 'application/x-apple-aspen-config'; // Correct MIME type for .mobileconfig
+    const mimeType = 'application/x-apple-aspen-config';
 
     const blob = new Blob([content], { type: mimeType });
     const url = URL.createObjectURL(blob);
@@ -161,37 +166,26 @@ function downloadMobileConfig(content, label) {
     const a = document.createElement('a');
     a.href = url;
     a.download = filename;
-    document.body.appendChild(a); // Required for Firefox
+    document.body.appendChild(a);
     a.click();
 
-    // Cleanup
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 }
 
-// Allow clicking the container to toggle the checkbox
+// Checkbox interaction code
 document.querySelectorAll('.checkbox-container').forEach(container => {
     container.addEventListener('click', (event) => {
-        // Only toggle if the click wasn't directly on the checkbox itself
-        // (to avoid double toggling) or on a link inside label (if any)
         if (event.target.type !== 'checkbox' && event.target.tagName !== 'A') {
             const checkbox = container.querySelector('input[type="checkbox"]');
-            if (checkbox) {
-                checkbox.checked = !checkbox.checked;
-                // Optional: Manually trigger change event if needed by other scripts
-                // checkbox.dispatchEvent(new Event('change'));
-            }
+            if (checkbox) { checkbox.checked = !checkbox.checked; }
         }
     });
-
-    // Allow toggling with spacebar when container is focused
     container.addEventListener('keydown', (event) => {
         if (event.key === ' ' || event.key === 'Enter') {
-             event.preventDefault(); // Prevent page scroll on space
+             event.preventDefault();
              const checkbox = container.querySelector('input[type="checkbox"]');
-            if (checkbox) {
-                checkbox.checked = !checkbox.checked;
-            }
+            if (checkbox) { checkbox.checked = !checkbox.checked; }
         }
     });
 });
