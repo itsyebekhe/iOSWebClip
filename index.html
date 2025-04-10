@@ -42,7 +42,7 @@
             display: grid; place-items: center; min-height: 100vh; padding: 20px;
         }
         .container {
-            background-color: var(--container-background); padding: 40px 45px; /* More padding */ border-radius: var(--border-radius);
+            background-color: var(--container-background); padding: 40px 45px; border-radius: var(--border-radius);
             box-shadow: var(--box-shadow); max-width: 550px; width: 100%; overflow: hidden;
         }
 
@@ -50,15 +50,11 @@
         h1 { font-size: 1.8rem; font-weight: 600; margin-bottom: 12px; color: var(--text-color); }
         p { margin-bottom: 30px; color: var(--text-color-secondary); font-size: 0.95rem; }
 
-        /* --- Form Elements --- */
-        #profileForm { display: flex; flex-direction: column; gap: 22px; /* Slightly more gap */ }
+        /* --- General Form Elements --- */
+        #profileForm { display: flex; flex-direction: column; gap: 25px; }
         label { font-weight: 500; font-size: 0.9rem; color: var(--text-color); }
-        label[for="labelName"], label[for="websiteUrl"], label[for="iconFile"],
-        label[for="profileName"], label[for="profileOrg"], label[for="consentText"] {
-            display: block; margin-bottom: 6px; /* Adjusted margin */
-        }
         input[type="text"], input[type="url"], input[type="file"] {
-            width: 100%; padding: 13px 16px; /* Adjusted padding */ border: 1px solid var(--border-color); border-radius: var(--border-radius-small);
+            width: 100%; padding: 13px 16px; border: 1px solid var(--border-color); border-radius: var(--border-radius-small);
             background-color: #fff; font-family: var(--font-family); font-size: 1rem; color: var(--text-color);
             transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
             appearance: none; -webkit-appearance: none;
@@ -66,123 +62,137 @@
         input[type="text"]:focus, input[type="url"]:focus, input[type="file"]:focus {
             outline: none; border-color: var(--primary-color); box-shadow: var(--box-shadow-focus);
         }
-        input[type="file"] { padding: 10px 16px; /* Adjusted padding */ background-color: var(--input-background); cursor: pointer; }
+        input[type="file"] { padding: 10px 16px; background-color: var(--input-background); cursor: pointer; }
         input[type="file"]::file-selector-button {
             font-family: var(--font-family); font-weight: 500; color: var(--primary-color); background-color: transparent;
             border: none; padding: 4px 8px; margin-right: 12px; cursor: pointer; transition: color var(--transition-speed) ease;
         }
         input[type="file"]::file-selector-button:hover { color: var(--primary-color-hover); }
 
-        /* Icon Preview */
-        #iconPreviewContainer { margin-top: -12px; margin-bottom: 8px; text-align: center; }
-        #iconPreview {
-            max-width: 70px; max-height: 70px; /* Slightly smaller */ border-radius: 18px; /* More rounded like iOS icons */ border: 1px solid var(--border-color);
-            background-color: var(--input-background); object-fit: cover; display: none;
-            margin: 5px auto; box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-        }
-        #iconPreview.visible { display: block; }
+        /* --- Web Clip Entry Specific Styles --- */
+        .webclips-section { border: 1px solid var(--border-color); border-radius: var(--border-radius-small); padding: 20px; margin-bottom: 15px; background-color: #fdfdfd; }
+        .webclips-section h2 { font-size: 1.2rem; margin-bottom: 20px; color: var(--text-color); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        #webclipsContainer { display: flex; flex-direction: column; gap: 30px; }
+        .webclip-entry { border: 1px dashed var(--border-color); border-radius: var(--border-radius-small); padding: 20px; position: relative; background-color: #fff; }
+        .webclip-entry label { display: block; margin-bottom: 6px; }
+        .webclip-entry .input-pair { margin-bottom: 15px; }
+        .remove-webclip-btn { position: absolute; top: 10px; right: 10px; background: var(--error-color); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; font-size: 14px; font-weight: bold; line-height: 22px; text-align: center; cursor: pointer; transition: background-color 0.2s ease, transform 0.2s ease; }
+        .remove-webclip-btn:hover { background-color: #c82333; transform: scale(1.1); }
+        .remove-webclip-btn:disabled { background-color: #ccc; cursor: not-allowed; transform: none; }
+        #addWebclipButton { background-color: var(--button-secondary-bg); color: var(--button-secondary-text); padding: 10px 15px; font-size: 0.9rem; font-weight: 500; border: none; border-radius: var(--border-radius-small); cursor: pointer; transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease; align-self: flex-start; margin-top: -5px; }
+        #addWebclipButton:hover { background-color: var(--button-secondary-hover-bg); transform: translateY(-1px); }
+        .icon-preview-container { margin-top: 5px; text-align: left; }
+        .icon-preview { max-width: 50px; max-height: 50px; border-radius: 12px; border: 1px solid var(--border-color); background-color: var(--input-background); object-fit: cover; display: none; margin: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .icon-preview.visible { display: inline-block; }
+
+        /* --- General Profile Settings Section --- */
+        .general-settings-section { border: 1px solid var(--border-color); border-radius: var(--border-radius-small); padding: 20px; background-color: #fdfdfd; }
+        .general-settings-section h2 { font-size: 1.2rem; margin-bottom: 20px; color: var(--text-color); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .general-settings-section label { display: block; margin-bottom: 6px; }
+        .general-settings-section .input-pair { margin-bottom: 15px; }
 
         /* --- Checkbox Styling --- */
         .checkbox-container { display: flex; align-items: center; gap: 12px; background-color: var(--input-background); padding: 12px 16px; border-radius: var(--border-radius-small); cursor: pointer; border: 1px solid transparent; transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; }
         .checkbox-container:focus-within { outline: none; border-color: var(--primary-color); box-shadow: var(--box-shadow-focus); }
-        input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary-color); cursor: pointer; margin: 0; flex-shrink: 0; /* Prevent shrinking */ }
+        input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary-color); cursor: pointer; margin: 0; flex-shrink: 0; }
         .checkbox-container label { font-weight: 500; font-size: 0.95rem; color: var(--text-color); cursor: pointer; flex-grow: 1; margin-bottom: 0; }
         .checkbox-container label small { display: block; font-weight: 400; font-size: 0.8rem; color: var(--text-color-secondary); }
 
         /* --- Button Group Styling --- */
-        .button-group { display: grid; /* Use grid for flexible layout */ grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); /* Responsive columns */ gap: 12px; margin-top: 20px; }
-        .button-group button { margin-top: 0; border: none; border-radius: var(--border-radius-small); cursor: pointer; font-family: var(--font-family); transition: all var(--transition-speed) ease; padding: 12px 15px; /* Base padding */ font-size: 0.95rem; font-weight: 500; text-align: center; }
-
-        /* Primary Generate Button - Modern Style */
-        #generateButton {
-            background: linear-gradient(145deg, var(--primary-color-light), var(--primary-color)); /* Subtle gradient */
-            color: var(--text-color-on-primary);
-            font-size: 1rem; /* Slightly larger font */
-            font-weight: 600; /* Bolder */
-            padding: 14px 20px; /* More padding */
-            box-shadow: 0 4px 10px rgba(0, 122, 255, 0.25); /* Color-matched shadow */
-            grid-column: 1 / -1; /* Make it full width initially in the grid */
-        }
-        #generateButton:hover:not(:disabled) {
-             background: linear-gradient(145deg, var(--primary-color), var(--primary-color-dark)); /* Darken gradient */
-             box-shadow: 0 6px 15px rgba(0, 94, 194, 0.3); /* Enhance shadow */
-             transform: translateY(-2px);
-        }
+        .button-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; margin-top: 20px; }
+        .button-group button { margin-top: 0; border: none; border-radius: var(--border-radius-small); cursor: pointer; font-family: var(--font-family); transition: all var(--transition-speed) ease; padding: 12px 15px; font-size: 0.95rem; font-weight: 500; text-align: center; }
+        #generateButton { background: linear-gradient(145deg, var(--primary-color-light), var(--primary-color)); color: var(--text-color-on-primary); font-size: 1rem; font-weight: 600; padding: 14px 20px; box-shadow: 0 4px 10px rgba(0, 122, 255, 0.25); grid-column: 1 / -1; }
+        #generateButton:hover:not(:disabled) { background: linear-gradient(145deg, var(--primary-color), var(--primary-color-dark)); box-shadow: 0 6px 15px rgba(0, 94, 194, 0.3); transform: translateY(-2px); }
         #generateButton:active:not(:disabled) { transform: translateY(0px); box-shadow: 0 2px 5px rgba(0, 94, 194, 0.2); }
         #generateButton:disabled { background: #cccccc; color: #888888; cursor: not-allowed; opacity: 0.7; box-shadow: none; transform: none; }
+        #resetButton, #saveConfigButton, #loadConfigButton { background-color: var(--button-secondary-bg); color: var(--button-secondary-text); }
+        #resetButton:hover, #saveConfigButton:hover, #loadConfigButton:hover { background-color: var(--button-secondary-hover-bg); transform: translateY(-1px); }
+        #resetButton:active, #saveConfigButton:active, #loadConfigButton:active { background-color: var(--button-secondary-active-bg); transform: translateY(0px); }
 
-        /* Secondary Buttons (Reset, Save, Load) - Modern Style */
-        #resetButton, #saveConfigButton, #loadConfigButton {
-             background-color: var(--button-secondary-bg);
-             color: var(--button-secondary-text);
-        }
-         #resetButton:hover, #saveConfigButton:hover, #loadConfigButton:hover {
-             background-color: var(--button-secondary-hover-bg);
-             transform: translateY(-1px);
-         }
-         #resetButton:active, #saveConfigButton:active, #loadConfigButton:active {
-             background-color: var(--button-secondary-active-bg);
-             transform: translateY(0px);
-         }
-
-        /* --- Status Message --- */
-        #status { margin-top: 25px; font-style: normal; font-size: 0.9rem; color: var(--text-color-secondary); min-height: 1.5em; text-align: center; transition: color 0.3s ease;}
-        #status.error { color: var(--error-color); font-weight: 500;}
-        #status.success { color: var(--success-color); font-weight: 500;}
+        /* --- Status Message & Spinner --- */
+        #status { margin-top: 25px; font-style: normal; font-size: 0.9rem; color: var(--text-color-secondary); min-height: 2.5em; text-align: center; position: relative; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        #statusText.error { color: var(--error-color); font-weight: 500;}
+        #statusText.success { color: var(--success-color); font-weight: 500;}
+        .spinner { border: 4px solid rgba(0, 0, 0, 0.1); border-left-color: var(--primary-color); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         /* --- Instructions Section --- */
-        .instructions { margin-top: 40px; /* More space */ padding: 25px; background-color: var(--input-background); /* Match input bg for subtle contrast */ border-radius: var(--border-radius); border: 1px solid var(--border-color); font-size: 0.88rem; color: var(--text-color-secondary); }
+        .instructions { margin-top: 40px; padding: 25px; background-color: var(--input-background); border-radius: var(--border-radius); border: 1px solid var(--border-color); font-size: 0.88rem; color: var(--text-color-secondary); }
         .instructions h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: var(--text-color); }
         .instructions ol { padding-left: 20px; list-style-type: decimal; }
         .instructions li { margin-bottom: 8px; line-height: 1.5; }
 
         /* --- Responsive Adjustments --- */
-        @media (max-width: 600px) {
-             body { padding: 15px; }
-             .container { padding: 30px 25px; }
-             h1 { font-size: 1.6rem; }
-             .button-group { grid-template-columns: 1fr 1fr; /* Two columns on small screens */ }
-             #generateButton { grid-column: 1 / -1; /* Still full width */ }
-        }
-        @media (max-width: 400px) {
-             /* Stack buttons on very small screens if needed */
-             .button-group { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 600px) { body { padding: 15px; } .container { padding: 30px 25px; } h1 { font-size: 1.6rem; } .button-group { grid-template-columns: 1fr 1fr; } #generateButton { grid-column: 1 / -1; } }
+        @media (max-width: 400px) { .button-group { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>iOS Web Clip Profile Generator</h1>
-        <p>Create a configuration profile (.mobileconfig) to add a website shortcut to your iOS home screen.</p>
+        <p>Create a configuration profile (.mobileconfig) to add website shortcuts to your iOS home screen.</p>
 
         <form id="profileForm">
-            <label for="labelName">Shortcut Name (Label):</label>
-            <input type="text" id="labelName" name="labelName" placeholder="e.g., My Favorite Site" required>
 
-            <label for="websiteUrl">Website URL:</label>
-            <!-- Simple URL input now -->
-            <input type="url" id="websiteUrl" name="websiteUrl" placeholder="https://example.com" required>
-
-            <label for="iconFile">Icon Image (PNG/JPEG, square recommended):</label>
-            <input type="file" id="iconFile" name="iconFile" accept="image/png, image/jpeg" required>
-            <!-- Icon Preview Area -->
-            <div id="iconPreviewContainer">
-                <img id="iconPreview" src="" alt="Icon Preview">
+            <div class="webclips-section">
+                <h2>Web Clips</h2>
+                <div id="webclipsContainer">
+                    <!-- Initial Web Clip Entry -->
+                    <div class="webclip-entry" data-entry-id="1">
+                        <button type="button" class="remove-webclip-btn" title="Remove this web clip" disabled>×</button>
+                        <div class="input-pair">
+                            <label for="labelName_1">Shortcut Name (Label):</label>
+                            <input type="text" id="labelName_1" name="labelName" placeholder="e.g., My Site" required>
+                        </div>
+                        <div class="input-pair">
+                            <label for="websiteUrl_1">Website URL:</label>
+                            <input type="url" id="websiteUrl_1" name="websiteUrl" placeholder="https://example.com" required>
+                        </div>
+                        <div class="input-pair">
+                             <label for="iconFile_1">Icon Image (PNG/JPEG, Optional):</label>
+                             <!-- REMOVED required -->
+                             <input type="file" id="iconFile_1" name="iconFile" accept="image/png, image/jpeg">
+                             <small style="display: block; margin-top: 3px; font-size: 0.8em;">If left blank, a default icon will be used.</small>
+                             <div class="icon-preview-container">
+                                 <img class="icon-preview" id="iconPreview_1" src="" alt="Icon Preview">
+                             </div>
+                         </div>
+                         <div class="input-pair checkbox-container" tabindex="0">
+                             <input type="checkbox" id="fullscreenToggle_1" name="fullscreenToggle">
+                             <label for="fullscreenToggle_1"> Open in Full Screen Mode?</label>
+                         </div>
+                    </div>
+                    <!-- More entries will be added here by JS -->
+                </div>
+                <button type="button" id="addWebclipButton">+ Add Another Web Clip</button>
             </div>
 
-            <div class="checkbox-container" tabindex="0">
-                 <input type="checkbox" id="fullscreenToggle" name="fullscreenToggle">
-                 <label for="fullscreenToggle"> Open in Full Screen Mode? <small>Hides browser address bar and buttons.</small> </label>
-             </div>
 
-            <label for="profileName">Profile Display Name (Optional):</label>
-            <input type="text" id="profileName" name="profileName" placeholder="e.g., Website Shortcuts">
+            <div class="general-settings-section">
+                <h2>General Profile Settings</h2>
+                <div class="input-pair">
+                     <label for="profileName">Profile Display Name (Optional):</label>
+                     <input type="text" id="profileName" name="profileName" placeholder="e.g., My Website Shortcuts">
+                </div>
+                <div class="input-pair">
+                    <label for="profileOrg">Organization Name (Optional):</label>
+                    <input type="text" id="profileOrg" name="profileOrg" placeholder="e.g., My Company">
+                </div>
+                 <div class="input-pair">
+                    <label for="consentText">Consent Text (Optional):</label>
+                    <input type="text" id="consentText" name="consentText" placeholder="Text shown during installation">
+                </div>
+                 <div class="input-pair">
+                    <label for="profileDescription">Profile Description (Optional):</label>
+                    <input type="text" id="profileDescription" name="profileDescription" placeholder="Describe profile purpose in Settings">
+                </div>
+                 <div class="input-pair">
+                    <label for="downloadFilename">Download Filename (Optional):</label>
+                    <input type="text" id="downloadFilename" name="downloadFilename" placeholder="my_webclips">
+                    <small style="display: block; margin-top: 3px; font-size: 0.8em;">`.mobileconfig` will be added automatically.</small>
+                </div>
+            </div>
 
-            <label for="profileOrg">Organization Name (Optional):</label>
-            <input type="text" id="profileOrg" name="profileOrg" placeholder="e.g., My Company">
-
-            <label for="consentText">Consent Text (Optional):</label>
-            <input type="text" id="consentText" name="consentText" placeholder="Text shown during installation">
 
             <!-- Button Group -->
             <div class="button-group">
@@ -193,20 +203,24 @@
             </div>
         </form>
 
-        <div id="status"></div>
+        <div id="status">
+            <div class="spinner" id="loadingSpinner"></div>
+            <span id="statusText"></span>
+        </div>
 
         <div class="instructions">
             <h2>How to Use</h2>
             <ol>
-                <li>Fill details (Label, URL, Icon required).</li> <!-- Updated -->
-                <li>Optionally fill other fields & choose Full Screen.</li>
+                <li>For each web clip, fill Label & URL. Select Icon (optional, uses default if blank). Choose Full Screen if desired.</li>
+                <li>Click "+ Add Another Web Clip" for more shortcuts.</li>
+                <li>Fill in the optional General Profile Settings (Profile Name, Org, Consent, Description, Filename).</li>
                 <li>(Optional) Save configuration for later use.</li>
                 <li>Click "Generate Profile".</li>
                 <li>A `.mobileconfig` file will download.</li>
                 <li>Transfer to iOS (Email, AirDrop, Files).</li>
                 <li>Open on iOS device & go to Settings > General > VPN & Device Management.</li>
-                <li>Tap profile, review (Consent Text), and Install (expect warnings).</li>
-                <li>Shortcut appears on Home Screen.</li>
+                <li>Tap profile, review (Consent, Description), and Install (expect warnings).</li>
+                <li>Shortcuts appear on Home Screen.</li>
             </ol>
         </div>
     </div>
