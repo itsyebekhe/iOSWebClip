@@ -13,56 +13,52 @@
             --font-family: 'Inter', sans-serif;
             --background-color: #f7f8fa;
             --container-background: #ffffff;
-            --primary-color: #007aff;
-            --primary-color-hover: #0056b3;
+            --primary-color: #007aff; /* Apple Blue */
+            --primary-color-light: #58aeff; /* Lighter blue for gradient/hover */
+            --primary-color-dark: #005ec2;  /* Darker blue for active */
             --text-color: #1d1d1f;
             --text-color-secondary: #6e6e73;
+            --text-color-on-primary: #ffffff;
             --border-color: #d2d2d7;
             --input-background: #f0f0f5;
-            --border-radius: 12px;
-            --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            --box-shadow-focus: 0 0 0 3px rgba(0, 122, 255, 0.2);
-            --transition-speed: 0.2s;
+            --button-secondary-bg: #e5e5ea;
+            --button-secondary-text: #3c3c43;
+            --button-secondary-hover-bg: #dcdce0;
+            --button-secondary-active-bg: #c7c7cc;
+            --error-color: #dc3545;
+            --success-color: #28a745;
+            --border-radius: 12px; /* Slightly larger radius */
+            --border-radius-small: 8px;
+            --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06); /* Softer, slightly larger shadow */
+            --box-shadow-focus: 0 0 0 3px rgba(0, 122, 255, 0.25);
+            --transition-speed: 0.25s;
         }
 
         /* --- Base Styles --- */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { font-size: 16px; }
         body {
-            font-family: var(--font-family);
-            line-height: 1.6;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            display: grid;
-            place-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            font-family: var(--font-family); line-height: 1.6; background-color: var(--background-color); color: var(--text-color);
+            display: grid; place-items: center; min-height: 100vh; padding: 20px;
         }
-
-        /* --- Container --- */
         .container {
-            background-color: var(--container-background);
-            padding: 35px 40px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            max-width: 550px;
-            width: 100%;
-            overflow: hidden;
+            background-color: var(--container-background); padding: 40px 45px; /* More padding */ border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow); max-width: 550px; width: 100%; overflow: hidden;
         }
 
         /* --- Typography --- */
-        h1 { font-size: 1.75rem; font-weight: 600; margin-bottom: 10px; color: var(--text-color); }
-        p { margin-bottom: 25px; color: var(--text-color-secondary); font-size: 0.95rem; }
+        h1 { font-size: 1.8rem; font-weight: 600; margin-bottom: 12px; color: var(--text-color); }
+        p { margin-bottom: 30px; color: var(--text-color-secondary); font-size: 0.95rem; }
 
         /* --- Form Elements --- */
-        #profileForm { display: flex; flex-direction: column; gap: 20px; }
+        #profileForm { display: flex; flex-direction: column; gap: 22px; /* Slightly more gap */ }
         label { font-weight: 500; font-size: 0.9rem; color: var(--text-color); }
         label[for="labelName"], label[for="websiteUrl"], label[for="iconFile"],
-        label[for="profileName"], label[for="profileOrg"], label[for="consentText"] /* Added consentText */ {
-            display: block; margin-bottom: 5px;
+        label[for="profileName"], label[for="profileOrg"], label[for="consentText"] {
+            display: block; margin-bottom: 6px; /* Adjusted margin */
         }
         input[type="text"], input[type="url"], input[type="file"] {
-            width: 100%; padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 8px;
+            width: 100%; padding: 13px 16px; /* Adjusted padding */ border: 1px solid var(--border-color); border-radius: var(--border-radius-small);
             background-color: #fff; font-family: var(--font-family); font-size: 1rem; color: var(--text-color);
             transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
             appearance: none; -webkit-appearance: none;
@@ -70,37 +66,88 @@
         input[type="text"]:focus, input[type="url"]:focus, input[type="file"]:focus {
             outline: none; border-color: var(--primary-color); box-shadow: var(--box-shadow-focus);
         }
-        input[type="file"] { padding: 8px 15px; background-color: var(--input-background); cursor: pointer; }
+        input[type="file"] { padding: 10px 16px; /* Adjusted padding */ background-color: var(--input-background); cursor: pointer; }
         input[type="file"]::file-selector-button {
             font-family: var(--font-family); font-weight: 500; color: var(--primary-color); background-color: transparent;
-            border: none; padding: 4px 8px; margin-right: 10px; cursor: pointer; transition: color var(--transition-speed) ease;
+            border: none; padding: 4px 8px; margin-right: 12px; cursor: pointer; transition: color var(--transition-speed) ease;
         }
         input[type="file"]::file-selector-button:hover { color: var(--primary-color-hover); }
 
+        /* Icon Preview */
+        #iconPreviewContainer { margin-top: -12px; margin-bottom: 8px; text-align: center; }
+        #iconPreview {
+            max-width: 70px; max-height: 70px; /* Slightly smaller */ border-radius: 18px; /* More rounded like iOS icons */ border: 1px solid var(--border-color);
+            background-color: var(--input-background); object-fit: cover; display: none;
+            margin: 5px auto; box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        }
+        #iconPreview.visible { display: block; }
+
         /* --- Checkbox Styling --- */
-        .checkbox-container { display: flex; align-items: center; gap: 10px; background-color: var(--input-background); padding: 10px 15px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; }
+        .checkbox-container { display: flex; align-items: center; gap: 12px; background-color: var(--input-background); padding: 12px 16px; border-radius: var(--border-radius-small); cursor: pointer; border: 1px solid transparent; transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; }
         .checkbox-container:focus-within { outline: none; border-color: var(--primary-color); box-shadow: var(--box-shadow-focus); }
-        input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary-color); cursor: pointer; margin: 0; }
+        input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary-color); cursor: pointer; margin: 0; flex-shrink: 0; /* Prevent shrinking */ }
         .checkbox-container label { font-weight: 500; font-size: 0.95rem; color: var(--text-color); cursor: pointer; flex-grow: 1; margin-bottom: 0; }
         .checkbox-container label small { display: block; font-weight: 400; font-size: 0.8rem; color: var(--text-color-secondary); }
 
-        /* --- Button Styling --- */
-        button { background-color: var(--primary-color); color: white; padding: 14px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 500; font-family: var(--font-family); transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease; margin-top: 10px; }
-        button:hover:not(:disabled) { background-color: var(--primary-color-hover); transform: translateY(-2px); }
-        button:active:not(:disabled) { transform: translateY(0px); }
-        button:disabled { background-color: #cccccc; color: #888888; cursor: not-allowed; opacity: 0.7; }
+        /* --- Button Group Styling --- */
+        .button-group { display: grid; /* Use grid for flexible layout */ grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); /* Responsive columns */ gap: 12px; margin-top: 20px; }
+        .button-group button { margin-top: 0; border: none; border-radius: var(--border-radius-small); cursor: pointer; font-family: var(--font-family); transition: all var(--transition-speed) ease; padding: 12px 15px; /* Base padding */ font-size: 0.95rem; font-weight: 500; text-align: center; }
+
+        /* Primary Generate Button - Modern Style */
+        #generateButton {
+            background: linear-gradient(145deg, var(--primary-color-light), var(--primary-color)); /* Subtle gradient */
+            color: var(--text-color-on-primary);
+            font-size: 1rem; /* Slightly larger font */
+            font-weight: 600; /* Bolder */
+            padding: 14px 20px; /* More padding */
+            box-shadow: 0 4px 10px rgba(0, 122, 255, 0.25); /* Color-matched shadow */
+            grid-column: 1 / -1; /* Make it full width initially in the grid */
+        }
+        #generateButton:hover:not(:disabled) {
+             background: linear-gradient(145deg, var(--primary-color), var(--primary-color-dark)); /* Darken gradient */
+             box-shadow: 0 6px 15px rgba(0, 94, 194, 0.3); /* Enhance shadow */
+             transform: translateY(-2px);
+        }
+        #generateButton:active:not(:disabled) { transform: translateY(0px); box-shadow: 0 2px 5px rgba(0, 94, 194, 0.2); }
+        #generateButton:disabled { background: #cccccc; color: #888888; cursor: not-allowed; opacity: 0.7; box-shadow: none; transform: none; }
+
+        /* Secondary Buttons (Reset, Save, Load) - Modern Style */
+        #resetButton, #saveConfigButton, #loadConfigButton {
+             background-color: var(--button-secondary-bg);
+             color: var(--button-secondary-text);
+        }
+         #resetButton:hover, #saveConfigButton:hover, #loadConfigButton:hover {
+             background-color: var(--button-secondary-hover-bg);
+             transform: translateY(-1px);
+         }
+         #resetButton:active, #saveConfigButton:active, #loadConfigButton:active {
+             background-color: var(--button-secondary-active-bg);
+             transform: translateY(0px);
+         }
 
         /* --- Status Message --- */
-        #status { margin-top: 25px; font-style: normal; font-size: 0.9rem; color: var(--text-color-secondary); min-height: 1.5em; text-align: center; }
+        #status { margin-top: 25px; font-style: normal; font-size: 0.9rem; color: var(--text-color-secondary); min-height: 1.5em; text-align: center; transition: color 0.3s ease;}
+        #status.error { color: var(--error-color); font-weight: 500;}
+        #status.success { color: var(--success-color); font-weight: 500;}
 
         /* --- Instructions Section --- */
-        .instructions { margin-top: 35px; padding: 20px; background-color: #f0f4ff; border-radius: var(--border-radius); border: 1px solid #d6e4ff; font-size: 0.88rem; color: #334d80; }
-        .instructions h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: #1a3a6e; }
+        .instructions { margin-top: 40px; /* More space */ padding: 25px; background-color: var(--input-background); /* Match input bg for subtle contrast */ border-radius: var(--border-radius); border: 1px solid var(--border-color); font-size: 0.88rem; color: var(--text-color-secondary); }
+        .instructions h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: var(--text-color); }
         .instructions ol { padding-left: 20px; list-style-type: decimal; }
         .instructions li { margin-bottom: 8px; line-height: 1.5; }
 
         /* --- Responsive Adjustments --- */
-        @media (max-width: 600px) { body { padding: 10px; } .container { padding: 25px 20px; } h1 { font-size: 1.5rem; } }
+        @media (max-width: 600px) {
+             body { padding: 15px; }
+             .container { padding: 30px 25px; }
+             h1 { font-size: 1.6rem; }
+             .button-group { grid-template-columns: 1fr 1fr; /* Two columns on small screens */ }
+             #generateButton { grid-column: 1 / -1; /* Still full width */ }
+        }
+        @media (max-width: 400px) {
+             /* Stack buttons on very small screens if needed */
+             .button-group { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -113,17 +160,19 @@
             <input type="text" id="labelName" name="labelName" placeholder="e.g., My Favorite Site" required>
 
             <label for="websiteUrl">Website URL:</label>
+            <!-- Simple URL input now -->
             <input type="url" id="websiteUrl" name="websiteUrl" placeholder="https://example.com" required>
 
-            <label for="iconFile">Icon Image (PNG recommended, square):</label>
+            <label for="iconFile">Icon Image (PNG/JPEG, square recommended):</label>
             <input type="file" id="iconFile" name="iconFile" accept="image/png, image/jpeg" required>
+            <!-- Icon Preview Area -->
+            <div id="iconPreviewContainer">
+                <img id="iconPreview" src="" alt="Icon Preview">
+            </div>
 
             <div class="checkbox-container" tabindex="0">
                  <input type="checkbox" id="fullscreenToggle" name="fullscreenToggle">
-                 <label for="fullscreenToggle">
-                     Open in Full Screen Mode?
-                     <small>Hides browser address bar and buttons.</small>
-                 </label>
+                 <label for="fullscreenToggle"> Open in Full Screen Mode? <small>Hides browser address bar and buttons.</small> </label>
              </div>
 
             <label for="profileName">Profile Display Name (Optional):</label>
@@ -132,12 +181,16 @@
             <label for="profileOrg">Organization Name (Optional):</label>
             <input type="text" id="profileOrg" name="profileOrg" placeholder="e.g., My Company">
 
-            <!-- ## START: Added Consent Text Field ## -->
             <label for="consentText">Consent Text (Optional):</label>
             <input type="text" id="consentText" name="consentText" placeholder="Text shown during installation">
-            <!-- ## END: Added Consent Text Field ## -->
 
-            <button type="submit" id="generateButton">Generate Profile</button>
+            <!-- Button Group -->
+            <div class="button-group">
+                <button type="submit" id="generateButton">Generate Profile</button>
+                <button type="button" id="resetButton">Reset Form</button>
+                <button type="button" id="saveConfigButton">Save Config</button>
+                <button type="button" id="loadConfigButton">Load Config</button>
+            </div>
         </form>
 
         <div id="status"></div>
@@ -145,16 +198,15 @@
         <div class="instructions">
             <h2>How to Use</h2>
             <ol>
-                <li>Fill in the details above (Consent Text is optional).</li> <!-- Updated -->
-                <li>Choose an icon image (PNG format, ideally square like 180x180px).</li>
-                <li>Decide if you want Full Screen mode.</li>
+                <li>Fill details (Label, URL, Icon required).</li> <!-- Updated -->
+                <li>Optionally fill other fields & choose Full Screen.</li>
+                <li>(Optional) Save configuration for later use.</li>
                 <li>Click "Generate Profile".</li>
-                <li>A `.mobileconfig` file will be downloaded.</li>
-                <li>Transfer this file to your iOS device (e.g., via Email, AirDrop, iCloud Drive).</li>
-                <li>Open the file on your iOS device.</li>
-                <li>Go to Settings > General > VPN & Device Management (or Profiles & Device Management).</li>
-                <li>Tap on the downloaded profile and follow the prompts to install it. You will see the Consent Text (if provided) and warnings – proceed if you trust this generated file.</li> <!-- Updated -->
-                <li>The website shortcut will appear on your home screen.</li>
+                <li>A `.mobileconfig` file will download.</li>
+                <li>Transfer to iOS (Email, AirDrop, Files).</li>
+                <li>Open on iOS device & go to Settings > General > VPN & Device Management.</li>
+                <li>Tap profile, review (Consent Text), and Install (expect warnings).</li>
+                <li>Shortcut appears on Home Screen.</li>
             </ol>
         </div>
     </div>
