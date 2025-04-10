@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iOS Web Clip Profile Generator</title>
-    
+
     <!-- Link to Google Font (Inter) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,17 +14,17 @@
         /* --- CSS Variables --- */
         :root {
             --font-family: 'Inter', sans-serif;
-            --background-color: #f7f8fa; /* Lighter background */
+            --background-color: #f7f8fa;
             --container-background: #ffffff;
-            --primary-color: #007aff; /* Apple's blue */
+            --primary-color: #007aff;
             --primary-color-hover: #0056b3;
-            --text-color: #1d1d1f; /* Darker text */
+            --text-color: #1d1d1f;
             --text-color-secondary: #6e6e73;
             --border-color: #d2d2d7;
-            --input-background: #f0f0f5; /* Slightly contrasting input bg */
-            --border-radius: 12px; /* Softer radius */
-            --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Softer shadow */
-            --box-shadow-focus: 0 0 0 3px rgba(0, 122, 255, 0.2); /* Focus ring */
+            --input-background: #f0f0f5;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            --box-shadow-focus: 0 0 0 3px rgba(0, 122, 255, 0.2);
             --transition-speed: 0.2s;
         }
 
@@ -36,7 +36,7 @@
         }
 
         html {
-             font-size: 16px; /* Base font size */
+             font-size: 16px;
         }
 
         body {
@@ -44,7 +44,7 @@
             line-height: 1.6;
             background-color: var(--background-color);
             color: var(--text-color);
-            display: grid; /* Use grid for centering */
+            display: grid;
             place-items: center;
             min-height: 100vh;
             padding: 20px;
@@ -53,17 +53,17 @@
         /* --- Container --- */
         .container {
             background-color: var(--container-background);
-            padding: 35px 40px; /* More padding */
+            padding: 35px 40px;
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
             max-width: 550px;
             width: 100%;
-            overflow: hidden; /* In case elements overflow radius */
+            overflow: hidden;
         }
 
         /* --- Typography --- */
         h1 {
-            font-size: 1.75rem; /* Responsive font size */
+            font-size: 1.75rem;
             font-weight: 600;
             margin-bottom: 10px;
             color: var(--text-color);
@@ -79,30 +79,40 @@
         #profileForm {
             display: flex;
             flex-direction: column;
-            gap: 20px; /* Spacing between form elements */
+            gap: 20px;
         }
 
+        /* General label styling */
         label {
-            display: block;
-            margin-bottom: 5px; /* Reduced margin */
-            font-weight: 500;
-            font-size: 0.9rem;
-            color: var(--text-color);
+             font-weight: 500;
+             font-size: 0.9rem;
+             color: var(--text-color);
         }
+
+        /* Label specifically for text/url/file inputs */
+        label[for="labelName"],
+        label[for="websiteUrl"],
+        label[for="iconFile"],
+        label[for="profileName"],
+        label[for="profileOrg"] {
+             display: block;
+             margin-bottom: 5px;
+        }
+
 
         input[type="text"],
         input[type="url"],
         input[type="file"] {
             width: 100%;
-            padding: 12px 15px; /* More padding */
+            padding: 12px 15px;
             border: 1px solid var(--border-color);
-            border-radius: 8px; /* Slightly less round than container */
-            background-color: #fff; /* White background for inputs */
+            border-radius: 8px;
+            background-color: #fff;
             font-family: var(--font-family);
             font-size: 1rem;
             color: var(--text-color);
             transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-            appearance: none; /* Remove default styles */
+            appearance: none;
             -webkit-appearance: none;
         }
 
@@ -114,13 +124,11 @@
             box-shadow: var(--box-shadow-focus);
         }
 
-        /* --- File Input Specific Styling --- */
-         input[type="file"] {
-            padding: 8px 15px; /* Adjust padding for file input */
+        input[type="file"] {
+            padding: 8px 15px;
             background-color: var(--input-background);
             cursor: pointer;
-         }
-        /* Style the button part of the file input */
+        }
          input[type="file"]::file-selector-button {
             font-family: var(--font-family);
             font-weight: 500;
@@ -136,6 +144,49 @@
              color: var(--primary-color-hover);
          }
 
+        /* --- Checkbox Styling --- */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Space between checkbox and label */
+            background-color: var(--input-background); /* Optional: subtle background */
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer; /* Make the whole area clickable */
+            border: 1px solid transparent; /* Placeholder for focus */
+            transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+        }
+        .checkbox-container:focus-within { /* Style container when checkbox inside is focused */
+             outline: none;
+             border-color: var(--primary-color);
+             box-shadow: var(--box-shadow-focus);
+        }
+
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-color); /* Modern way to color checkbox */
+            cursor: pointer;
+            margin: 0; /* Remove default margin */
+        }
+
+        /* Label specifically for the checkbox */
+        .checkbox-container label {
+            font-weight: 500;
+            font-size: 0.95rem; /* Match input text size */
+            color: var(--text-color);
+            cursor: pointer;
+            flex-grow: 1; /* Allow label to take up space */
+            margin-bottom: 0; /* Override general label margin */
+        }
+        .checkbox-container label small {
+             display: block;
+             font-weight: 400;
+             font-size: 0.8rem;
+             color: var(--text-color-secondary);
+        }
+
 
         /* --- Button Styling --- */
         button {
@@ -149,16 +200,16 @@
             font-weight: 500;
             font-family: var(--font-family);
             transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
-            margin-top: 10px; /* Space above button */
+            margin-top: 10px;
         }
 
         button:hover:not(:disabled) {
             background-color: var(--primary-color-hover);
-            transform: translateY(-2px); /* Subtle lift */
+            transform: translateY(-2px);
         }
 
         button:active:not(:disabled) {
-             transform: translateY(0px); /* Press down */
+             transform: translateY(0px);
         }
 
         button:disabled {
@@ -171,10 +222,10 @@
         /* --- Status Message --- */
         #status {
             margin-top: 25px;
-            font-style: normal; /* Remove italic */
+            font-style: normal;
             font-size: 0.9rem;
             color: var(--text-color-secondary);
-            min-height: 1.5em; /* Prevent layout shift */
+            min-height: 1.5em;
             text-align: center;
         }
 
@@ -182,11 +233,11 @@
         .instructions {
             margin-top: 35px;
             padding: 20px;
-            background-color: #f0f4ff; /* Lighter blue background */
+            background-color: #f0f4ff;
             border-radius: var(--border-radius);
-            border: 1px solid #d6e4ff; /* Soft border */
+            border: 1px solid #d6e4ff;
             font-size: 0.88rem;
-            color: #334d80; /* Darker blue text */
+            color: #334d80;
         }
 
         .instructions h2 {
@@ -197,8 +248,8 @@
         }
 
         .instructions ol {
-            padding-left: 20px; /* Indent list */
-            list-style-type: decimal; /* Standard numbers */
+            padding-left: 20px;
+            list-style-type: decimal;
         }
 
         .instructions li {
@@ -206,7 +257,7 @@
             line-height: 1.5;
         }
 
-        /* --- Optional: Responsive Adjustments --- */
+        /* --- Responsive Adjustments --- */
         @media (max-width: 600px) {
             body {
                 padding: 10px;
@@ -218,11 +269,9 @@
                  font-size: 1.5rem;
             }
         }
-
     </style>
 </head>
 <body>
-    <!-- The rest of your HTML body remains the same -->
     <div class="container">
         <h1>iOS Web Clip Profile Generator</h1>
         <p>Create a configuration profile (.mobileconfig) to add a website shortcut to your iOS home screen.</p>
@@ -236,6 +285,17 @@
 
             <label for="iconFile">Icon Image (PNG recommended, square):</label>
             <input type="file" id="iconFile" name="iconFile" accept="image/png, image/jpeg" required>
+
+            <!-- ## START: Added Full Screen Toggle ## -->
+            <div class="checkbox-container" tabindex="0"> <!-- Make container focusable -->
+                 <input type="checkbox" id="fullscreenToggle" name="fullscreenToggle">
+                 <label for="fullscreenToggle">
+                     Open in Full Screen Mode?
+                     <small>Hides browser address bar and buttons.</small>
+                 </label>
+             </div>
+            <!-- ## END: Added Full Screen Toggle ## -->
+
 
             <label for="profileName">Profile Display Name (Optional):</label>
             <input type="text" id="profileName" name="profileName" placeholder="e.g., Website Shortcuts">
@@ -253,6 +313,7 @@
             <ol>
                 <li>Fill in the details above.</li>
                 <li>Choose an icon image (PNG format, ideally square like 180x180px).</li>
+                <li>Decide if you want Full Screen mode.</li> <!-- Updated instruction -->
                 <li>Click "Generate Profile".</li>
                 <li>A `.mobileconfig` file will be downloaded.</li>
                 <li>Transfer this file to your iOS device (e.g., via Email, AirDrop, iCloud Drive).</li>

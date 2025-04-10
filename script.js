@@ -4,6 +4,7 @@ document.getElementById('profileForm').addEventListener('submit', function(event
     const labelName = document.getElementById('labelName').value.trim();
     const websiteUrl = document.getElementById('websiteUrl').value.trim();
     const iconFile = document.getElementById('iconFile').files[0];
+    const isFullScreen = document.getElementById('fullscreenToggle').checked; // Get checkbox state (true/false)
     const profileName = document.getElementById('profileName').value.trim() || `Web Clip: ${labelName}`;
     const profileOrg = document.getElementById('profileOrg').value.trim() || 'Self-Generated';
     const statusDiv = document.getElementById('status');
@@ -36,7 +37,8 @@ document.getElementById('profileForm').addEventListener('submit', function(event
             websiteUrl,
             base64IconData,
             profileName,
-            profileOrg
+            profileOrg,
+            isFullScreen // <-- Pass the boolean value here
         );
 
         downloadMobileConfig(profileContent, labelName);
@@ -62,7 +64,8 @@ function generateUUID() {
     });
 }
 
-function generateMobileConfig(label, url, iconBase64, profileDisplayName, profileOrg) {
+// Updated function signature to accept isFullScreen
+function generateMobileConfig(label, url, iconBase64, profileDisplayName, profileOrg, isFullScreen) {
     const profileUUID = generateUUID();
     const payloadUUID = generateUUID();
     const profileIdentifier = `com.example.webclip.${profileUUID}`; // Make it somewhat unique
@@ -88,6 +91,7 @@ function generateMobileConfig(label, url, iconBase64, profileDisplayName, profil
 
 
     // .mobileconfig XML structure
+    // Use the isFullScreen variable to output <true/> or <false/> tag
     const xmlString = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -96,7 +100,7 @@ function generateMobileConfig(label, url, iconBase64, profileDisplayName, profil
     <array>
         <dict>
             <key>FullScreen</key>
-            <false/>
+            <${isFullScreen ? 'true' : 'false'}/>
             <key>Icon</key>
             <data>${iconBase64}</data>
             <key>IsRemovable</key>
@@ -164,3 +168,30 @@ function downloadMobileConfig(content, label) {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 }
+
+// Allow clicking the container to toggle the checkbox
+document.querySelectorAll('.checkbox-container').forEach(container => {
+    container.addEventListener('click', (event) => {
+        // Only toggle if the click wasn't directly on the checkbox itself
+        // (to avoid double toggling) or on a link inside label (if any)
+        if (event.target.type !== 'checkbox' && event.target.tagName !== 'A') {
+            const checkbox = container.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                // Optional: Manually trigger change event if needed by other scripts
+                // checkbox.dispatchEvent(new Event('change'));
+            }
+        }
+    });
+
+    // Allow toggling with spacebar when container is focused
+    container.addEventListener('keydown', (event) => {
+        if (event.key === ' ' || event.key === 'Enter') {
+             event.preventDefault(); // Prevent page scroll on space
+             const checkbox = container.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+            }
+        }
+    });
+});
